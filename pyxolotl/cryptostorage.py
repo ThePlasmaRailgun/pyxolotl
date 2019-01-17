@@ -85,7 +85,7 @@ class AESCipher:
 
 class CryptoStorage:
     """Encrypted storage"""
-    def __init__(self, mastersecret=b'', rounds=100000, keysize=256, hash_=SHA256):
+    def __init__(self, mastersecret=b'', rounds=100000, keysize=256, hash_=SHA256, hash_name='sha256'):
         self.mastersecret = mastersecret
         self.rounds = rounds
         self.keysize_bytes = int(keysize / 8)
@@ -93,10 +93,11 @@ class CryptoStorage:
         self.key = b''
         self.hmac_key = b''
         self.is_open = False
+        self.hash_name_ = hash_name
 
     def get_keys_from_passphrase(self, passphrase, salt):
         """Derive key + hmac_key from passphrase and salt"""
-        keys = hashlib.pbkdf2_hmac(self.hash_.hashFactory().name, passphrase, salt, self.rounds,
+        keys = hashlib.pbkdf2_hmac(self.hash_name_, passphrase, salt, self.rounds,
                                    self.keysize_bytes + self.hash_.digest_size)
         return keys
 
